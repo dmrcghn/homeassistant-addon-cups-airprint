@@ -1,17 +1,7 @@
 #!/usr/bin/with-contenv bashio
 
-ulimit -n 524288
-
-until [ -e /var/run/avahi-daemon/socket ]; do
-  sleep 1s
-done
-
-bashio::log.info "Preparing directories"
-if [ ! -d /config/cups ]; then cp -v -R /etc/cups /config; fi
-rm -v -fR /etc/cups
-
-ln -v -s /config/cups /etc/cups
-
-bashio::log.info "Starting CUPS server as CMD from S6"
-
-cupsd -f
+# s6-overlay manages all services (dbus, avahi, cups).
+# This script exists as the container CMD but all real work
+# is done by s6 services. Just keep the container alive.
+bashio::log.info "Addon started - services managed by s6-overlay"
+sleep infinity

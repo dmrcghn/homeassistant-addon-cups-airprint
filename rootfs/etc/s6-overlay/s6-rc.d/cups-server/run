@@ -8,5 +8,10 @@ until [ -e /var/run/avahi-daemon/socket ]; do
   sleep 1s
 done
 
-cupsd -f
+bashio::log.info "Preparing directories"
+if [ ! -d /config/cups ]; then cp -v -R /etc/cups /config; fi
+rm -v -fR /etc/cups
+ln -v -sf /config/cups /etc/cups
 
+bashio::log.info "Starting cupsd"
+exec cupsd -f
